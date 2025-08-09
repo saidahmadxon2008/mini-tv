@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini TV</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #ff6600;
+      padding: 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .channels {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 10px;
+    }
+    .channel-btn {
+      background: #222;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .channel-btn:hover {
+      background: #ff6600;
+    }
+    video {
+      width: 90%;
+      max-width: 800px;
+      margin-top: 15px;
+      border: 3px solid #ff6600;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>📺 Mini TV</header>
+
+<div class="channels">
+  <button class="channel-btn" onclick="playChannel('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">Test Kanal 1</button>
+  <button class="channel-btn" onclick="playChannel('https://moiptvhls-i.akamaihd.net/hls/live/652034/secure/playlist.m3u8')">Test Kanal 2</button>
+</div>
+
+<video id="videoPlayer" controls autoplay></video>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+  var video = document.getElementById('videoPlayer');
+
+  function playChannel(url) {
+    if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = url;
+      video.addEventListener('loadedmetadata', function () {
+        video.play();
+      });
+    }
+  }
+</script>
+
+</body>
+</html>
